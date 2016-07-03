@@ -75,14 +75,16 @@ Wechat.prototype.updateAccessToken = function(data) {
 	})
 }
 
+//当请求方式为POST时，根据请求内容message生成响应
 Wechat.prototype.reply = function() {
-	var content = this.body;
+	var content = this.body;	//这里的this是指请求？
 	var message = this.weixin;
 	var xml = util.tpl(content, message);
 
 	this.status = 200;
 	this.type = 'application/xml';
-	this.body = xml;
+	this.body = xml;	//将xml作为响应传回微信服务器来解析，结果发送到微信用户
+
 
 }
 

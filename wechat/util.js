@@ -50,6 +50,7 @@ function formatMessage(result) {
 
 exports.formatMessage = formatMessage;
 
+//响应的具体形式
 exports.tpl = function(content, message) {
 	var info = {};
 	var type = 'text';
@@ -60,7 +61,7 @@ exports.tpl = function(content, message) {
 		type = 'news';
 	}
 
-	type = content.type || type;
+	//type = content.type || type;
 	info.content = content;
 	info.createTime = new Date().getTime();
 	info.msgType = type;

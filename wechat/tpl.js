@@ -7,12 +7,29 @@ var heredoc = require('heredoc');
 var tpl = heredoc(function() {
 /*
 	<xml>
-	<ToUserName><![CDATA[<% ToUserName %>]]></ToUserName>
-	<FromUserName><![CDATA[<% FromUserName %>]]></FromUserName>
-	<CreateTime><% now %></CreateTime>
-	<MsgType><![CDATA[<% msgType %>]]></MsgType>
-	<% if (msgType === 'text') { %>
-	<Content><![CDATA[<% content %>]]></Content>
+		<ToUserName><![CDATA[<%= toUserName %>]]></ToUserName>
+		<FromUserName><![CDATA[<%= fromUserName %>]]></FromUserName>
+		<CreateTime><![CDATA[<%= createTime %>]]></CreateTime>
+		<MsgType><![CDATA[<%= msgType %>]]></MsgType>
+		<Content><![CDATA[<%= content %>]]></Content>
+	</xml>;
+*/})
+
+//进行编译后再导出
+var compiled = ejs.compile(tpl);
+
+exports = module.exports = {
+	compiled: compiled
+};
+
+
+
+/*
+	<% if (msgType === 'text') %>
+	<Content><![CDATA[<%= content %>]]></Content>
+
+
+
 	<% } else if (msgType === 'image') { %>
 		<Image>
 			<MediaId><![CDATA[<% content.media_id %>]]></MediaId>
@@ -49,12 +66,4 @@ var tpl = heredoc(function() {
 		<% }) %>
 		</Articles>
 	<% } %>
-			</xml>';
-*/})
-
-//进行编译后再导出
-var compiled = ejs.compile(tpl);
-
-exports = module.exports = {
-	compiled: compiled
-};
+*/

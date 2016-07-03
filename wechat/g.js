@@ -7,9 +7,13 @@ var Wechat = require('./wechat');
 var getRawBody = require('raw-body');
 var util = require('./util');
 
-module.exports = function(opts) {
+//var weixin = require('../weixin');
+
+
+module.exports = function(opts, handler) {
 
 	//测试时，不需要票据操作；自动回复消息也不需要获取票据
+	//业务层逻辑可通过生成实例来实现？？
 	var wechat = new Wechat(opts);
 
 	return function *(next) {
@@ -29,14 +33,13 @@ module.exports = function(opts) {
 						this.body = echostr + '';
 					} else {
 						this.body = 'failed!';
-					}
+					}	
 				}
 				else if (this.method === 'POST') {
-					if (sha !== signature) {
+					/*if (sha !== signature) {
 						this.body = 'failed!';
 						return false;
-					}
-
+					}*/
 					var data = yield getRawBody(this.req, {
 						length: this.length,
 						limit: '1mb',
@@ -49,16 +52,17 @@ module.exports = function(opts) {
 					console.log(content);
 
 					var message = util.formatMessage(content.xml);
+					console.log('message');
 					console.log(message);
 
 					this.weixin = message;
-
+					this.body = '大二逼呀';
 					//这里应该yield，走向外层逻辑，把控制权交给业务层，来决定回复何种消息
 
-					//通过call改变上下文，将next作为参数传递给handler
+					//通过call改变上下文，将next作为参数传递给weixin.reply
 					yield handler.call(this, next);
 
-					wechat.reply.call(this);
+					wechat.reply.call(this);	//其中有对this.body的赋值，即产生响应
 
 
 
